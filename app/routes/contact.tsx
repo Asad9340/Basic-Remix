@@ -1,3 +1,20 @@
+import { ActionFunctionArgs } from "@remix-run/node";
+import { Form, redirect } from "@remix-run/react";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const form = await request.formData();
+  const name = form.get("name");
+  const email = form.get("email");
+  const message = form.get("message");
+  const result = {
+    name,
+    email,
+    message,
+  }
+  console.log(result)
+  return redirect('/services')
+}
+
 const ContactUs = () => {
   return (
     <div className="bg-gray-50 py-16 px-6 sm:px-12 lg:px-24">
@@ -14,7 +31,7 @@ const ContactUs = () => {
           <h3 className="text-2xl font-semibold text-gray-800 mb-6">
             Send Us a Message
           </h3>
-          <form>
+          <Form method="POST">
             <div className="grid grid-cols-1 gap-6 max-w-xl mx-auto">
               <div>
                 <label
@@ -76,7 +93,7 @@ const ContactUs = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </Form>
         </div>
 
         {/* Contact Information Section */}
