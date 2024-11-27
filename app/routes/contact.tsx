@@ -1,17 +1,26 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import { Form, redirect } from "@remix-run/react";
+import { ActionFunctionArgs } from '@remix-run/node';
+import { Form, redirect } from '@remix-run/react';
+import { createMessage, Message } from '~/data/messageData';
 
 export async function action({ request }: ActionFunctionArgs) {
   const form = await request.formData();
-  const name = form.get("name");
-  const email = form.get("email");
-  const message = form.get("message");
-  const result = {
+  const name = form.get('name');
+  const email = form.get('email');
+  const message = form.get('message');
+  if (
+    typeof name !== 'string' ||
+    typeof email !== 'string' ||
+    typeof message !== 'string'
+  ) {
+    throw new Error('Invalid form data');
+  }
+  const result: Message = {
+    id: new Date().toLocaleTimeString(),
     name,
     email,
     message,
-  }
-  console.log(result)
+  };
+  await createMessage(result);
   return redirect('/services')
 }
 
